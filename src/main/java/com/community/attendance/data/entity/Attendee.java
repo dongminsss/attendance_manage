@@ -1,8 +1,12 @@
 package com.community.attendance.data.entity;
 
+import com.community.attendance.data.entity.base.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
+import java.io.Serializable;
+import java.security.Identity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -10,8 +14,10 @@ import java.time.LocalDateTime;
 @Table(name = "attendee")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@SuperBuilder(toBuilder = true)
 @ToString
-public class Attendee {
+public class Attendee extends BaseTimeEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,12 +30,8 @@ public class Attendee {
     @Column(name = "attendee_gender", nullable = false)
     private char gender;
 
-
     @Column(name = "attendee_birthday")
     private LocalDate birthday;
-
-    @Column(name = "attendee_registration")
-    private LocalDateTime registrationDate;
 
     @Column(name = "attendee_description")
     private String description;
@@ -38,13 +40,4 @@ public class Attendee {
     @JoinColumn(name = "class_id", nullable = false)
     private ClassEntity classEntity;
 
-    @Builder
-    protected Attendee(String name, char gender, LocalDate birthday, String description, ClassEntity classEntity) {
-        this.name = name;
-        this.gender = gender;
-        this.birthday = birthday;
-        this.registrationDate = LocalDateTime.now();
-        this.description = description;
-        this.classEntity = classEntity;
-    }
 }

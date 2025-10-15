@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "attendee_log")
@@ -18,11 +18,11 @@ public class AttendeeLog {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "attendee_log_id")
+    @Column(name = "attendee_log_id",  nullable = false, updatable = false)
     private Long id;
 
     @Column(name = "attendee_log_time", nullable = false)
-    private LocalDateTime logTime;
+    private LocalDate logDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "attendee_id", nullable = false)

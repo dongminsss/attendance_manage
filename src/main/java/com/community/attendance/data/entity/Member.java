@@ -1,7 +1,10 @@
 package com.community.attendance.data.entity;
 
+import com.community.attendance.data.entity.base.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -10,31 +13,28 @@ import java.util.Date;
 @Table(name = "member")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString
-public class Member {
+@SuperBuilder(toBuilder = true)
+@AllArgsConstructor
+@ToString(exclude = "password")
+public class Member extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long id;
 
-    @Column(name = "member_m_id", nullable = false, unique = true)
+    @Column(name = "member_m_id", nullable = false, unique = true, length = 20)
     private String memberId;
 
-    @Column(name = "member_pw", nullable = false)
-    private String password;
+    @Getter(AccessLevel.NONE)
+    @Column(name = "member_pw", nullable = false, length = 100)
+    private String passwordHash;
 
-    @Column(name = "member_nickname", nullable = false)
+    @Column(name = "member_nickname", nullable = false, length = 10)
     private String nickName;
 
-    @Column(name = "member_join_dates")
-    private LocalDateTime joinDate;
 
-    @Builder
-    protected Member(String memberId, String password, String nickName, LocalDateTime joinDate) {
-        this.memberId = memberId;
-        this.password = password;
-        this.nickName = nickName;
-        this.joinDate = LocalDateTime.now();
+    public boolean matchesRawPassword(PasswordEncoder encoder, String rawPassword) {
+        return encoder.matches(rawPassword, this.passwordHash);
     }
 }

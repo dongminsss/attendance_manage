@@ -1,14 +1,18 @@
 package com.community.attendance.data.entity;
 
+import com.community.attendance.data.entity.base.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "class")
 @Getter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ClassEntity {
+@AllArgsConstructor
+@SuperBuilder(toBuilder = true)
+public class ClassEntity extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,17 +22,7 @@ public class ClassEntity {
     @Column(name = "class_name", nullable = false)
     private String name;
 
-    @Column(name = "class_description")
+    @Column(name = "class_description", length = 100)
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
-    private Member member;
-
-    @Builder
-    protected ClassEntity(String name, String description, Member member) {
-        this.name = name;
-        this.description = description;
-        this.member = member;
-    }
 }
